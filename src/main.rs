@@ -1,12 +1,24 @@
 use std::env;
-use std::fs;
+use std::process;
+mod lib;
+use lib::Config;
 fn main() {
-    let args:Vec<String> = env::args().collect();
-    let arr:Vec<String> =vec!["ssss".to_string(),"333".to_string()];
-    let query=&args[1];
-    let file_name=&args[2];
-    println!("query={:?},file_name={:?}",query,file_name);
-    let content=fs::read_to_string(file_name).expect("Something went wrong reading the file");
-    println!("content:{:?}",content);
+    //第一种方法
+    //let args: Vec<String> = env::args().collect();
+    // let result = Config::new(&args);
+    //第二种
+    let result=Config::new(env::args());
+    let config = result.unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
 
+
+    println!("query={:?},file_name={:?}", config.query, config.filename);
+    if let Err(e) =Config::run(config){
+        println!("Application error: {}", e);
+
+        process::exit(1);
+    };
 }
+
