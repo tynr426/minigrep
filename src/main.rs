@@ -15,7 +15,7 @@ fn main() {
 
 
     println!("query={:?},file_name={:?}", config.query, config.filename);
-    if let Err(e) =Config::run(config){
+    if let Err(e) =Config::run(&config){
         println!("Application error: {}", e);
 
         process::exit(1);
